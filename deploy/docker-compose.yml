@@ -1,0 +1,11 @@
+services:
+  caisse-mam-sira:
+    image: nginx:alpine
+    container_name: caisse-mam-sira
+    restart: unless-stopped
+    # ⚠️ Vérifier qu'aucun service n'occupe déjà 8769 (`docker ps`) avant de lancer.
+    ports:
+      - "8769:80"
+    volumes:
+      - ../app:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
