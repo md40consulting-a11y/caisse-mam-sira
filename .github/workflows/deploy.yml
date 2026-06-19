@@ -1,0 +1,21 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy app/ to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: app        # seul le contenu de app/ est servi, pas deploy/ ni analyse/
+          branch: gh-pages
+          clean: true
