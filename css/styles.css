@@ -1,0 +1,392 @@
+/* styles.css — mobile-first, gros boutons tactiles, thème bleu/crème (carte Mam Sira). */
+
+:root {
+  --creme:        #faf3e0;
+  --creme-fonce:  #f0e6cd;
+  --bleu:         #14507a;
+  --bleu-fonce:   #0d3a59;
+  --bleu-clair:   #2b6da3;
+  --vert:         #2e7d4f;
+  --vert-fonce:   #1f5c39;
+  --rouge:        #b3402e;
+  --gris:         #6b6256;
+  --texte:        #2a2620;
+  --blanc:        #ffffff;
+  --ombre:        0 2px 6px rgba(0, 0, 0, 0.18);
+  --rayon:        12px;
+  --nav-h:        58px;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--creme);
+  color: var(--texte);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  overscroll-behavior: none;
+}
+
+body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidden; }
+
+/* ---- Écrans ---- */
+.screen {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: var(--nav-h);
+}
+.screen[hidden] { display: none; }
+
+.screen-titre {
+  margin: 0;
+  padding: 14px 16px 8px;
+  font-size: 1.25rem;
+  color: var(--bleu-fonce);
+}
+
+/* ---- Boutons génériques ---- */
+.btn {
+  border: none;
+  border-radius: var(--rayon);
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 0 16px;
+  min-height: 52px;
+  color: var(--blanc);
+  background: var(--bleu);
+  cursor: pointer;
+  transition: transform 0.05s ease, filter 0.1s ease;
+  touch-action: manipulation;
+}
+.btn:active { transform: scale(0.97); filter: brightness(0.93); }
+.btn:disabled { opacity: 0.45; pointer-events: none; }
+.btn-block { display: block; width: calc(100% - 32px); margin: 12px 16px; }
+.btn-primary { background: var(--bleu); }
+.btn-neutre  { background: var(--gris); }
+.btn-cb      { background: var(--bleu-clair); }
+.btn-especes { background: var(--vert); }
+
+/* ---- Écran 0 : config ---- */
+#screen-config { justify-content: center; align-items: center; padding: 24px; }
+.config-box {
+  background: var(--blanc);
+  border-radius: 16px;
+  box-shadow: var(--ombre);
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+.config-box h1 { margin: 0 0 4px; color: var(--bleu-fonce); font-size: 2rem; }
+.config-box p  { margin: 0 0 24px; color: var(--gris); }
+.config-box label { display: block; text-align: left; font-weight: 600; margin-bottom: 6px; }
+.config-box input {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 14px;
+  border: 2px solid var(--creme-fonce);
+  border-radius: var(--rayon);
+  margin-bottom: 18px;
+}
+.config-box input:focus { outline: none; border-color: var(--bleu-clair); }
+
+/* ---- Écran 1 : caisse ---- */
+.produits-zone {
+  flex: 0 0 auto;        /* hauteur naturelle, prioritaire : les 10 produits tiennent sans scroll */
+  overflow-y: auto;      /* filet de sécurité sur écran minuscule */
+  padding: 10px 12px 4px;
+}
+.cat-titre {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gris);
+  margin: 7px 4px 5px;
+}
+.produits-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: 8px;
+}
+.produit-btn {
+  position: relative;
+  background: var(--blanc);
+  border: 2px solid var(--creme-fonce);
+  border-radius: var(--rayon);
+  min-height: 70px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  text-align: center;
+  touch-action: manipulation;
+  transition: transform 0.05s ease, border-color 0.1s ease;
+}
+.produit-btn:active { transform: scale(0.96); }
+.produit-btn.actif  { border-color: var(--bleu); }
+.produit-nom  { font-size: 0.92rem; font-weight: 600; line-height: 1.1; }
+.produit-prix { font-size: 0.85rem; color: var(--bleu-fonce); font-weight: 700; }
+.produit-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 13px;
+  background: var(--bleu);
+  color: var(--blanc);
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--ombre);
+}
+.produit-badge[hidden] { display: none; }
+
+/* Panier — récupère tout l'espace restant entre la grille et la barre d'encaissement */
+.panier {
+  flex: 1 1 auto;
+  min-height: 96px;       /* toujours visible, même quand la grille est haute */
+  overflow-y: auto;       /* scrolle seulement si le panier dépasse vraiment */
+  background: var(--creme-fonce);
+  border-top: 2px solid #e2d6ba;
+}
+.panier-lignes:empty::before {
+  content: "Panier vide — touchez un produit";
+  display: block;
+  padding: 16px;
+  color: var(--gris);
+  text-align: center;
+  font-style: italic;
+}
+.panier-ligne {
+  display: grid;
+  /* 6 colonnes : nom | − | qté | + | total | ✕  (sinon la 6e cellule passe à la ligne) */
+  grid-template-columns: 1fr auto auto auto auto auto;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #e2d6ba;
+}
+.pl-nom   { font-weight: 600; line-height: 1.15; font-size: 0.98rem; }
+.pl-qte   { min-width: 28px; text-align: center; font-weight: 700; font-size: 1.1rem; }
+.pl-total { min-width: 64px; text-align: right; font-weight: 700; }
+.pl-btn {
+  width: 44px; height: 46px;
+  border: none; border-radius: 8px;
+  background: var(--blanc);
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--bleu-fonce);
+  cursor: pointer;
+}
+.pl-btn.pl-suppr { color: var(--rouge); font-size: 1.1rem; }
+.pl-btn:active { filter: brightness(0.9); }
+
+/* Barre d'encaissement fixe */
+.barre-encaissement {
+  flex: 0 0 auto;
+  background: var(--blanc);
+  border-top: 2px solid var(--creme-fonce);
+  padding: 10px 12px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+}
+.total-ligne {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.total-ligne > span:first-child { font-size: 1rem; color: var(--gris); font-weight: 600; }
+.total-montant { font-size: 2rem; font-weight: 800; color: var(--bleu-fonce); }
+.encaissement-boutons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.encaissement-boutons .btn { min-height: 58px; font-size: 1.1rem; }
+
+/* ---- Écran 2 : espèces ---- */
+#screen-especes { padding: 12px 12px calc(var(--nav-h) + 12px); }
+.especes-haut { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.especes-bloc {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 10px 16px;
+}
+.especes-label { color: var(--gris); font-weight: 600; }
+.especes-du   { font-size: 1.6rem; font-weight: 800; color: var(--bleu-fonce); }
+.especes-recu { font-size: 1.6rem; font-weight: 800; }
+.especes-rendu-bloc { background: var(--vert); }
+.especes-rendu-bloc .especes-label { color: rgba(255,255,255,0.85); }
+.especes-rendu { font-size: 2rem; font-weight: 800; color: var(--blanc); }
+.especes-rendu-bloc.negatif { background: var(--rouge); }
+
+.raccourcis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+.raccourci-btn {
+  min-height: 48px;
+  border: 2px solid var(--bleu-clair);
+  background: var(--blanc);
+  color: var(--bleu-fonce);
+  border-radius: var(--rayon);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.raccourci-btn:active { filter: brightness(0.95); }
+
+.pave-num {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.pave-touche {
+  border: none;
+  border-radius: var(--rayon);
+  background: var(--blanc);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--texte);
+  min-height: 60px;
+  cursor: pointer;
+  box-shadow: var(--ombre);
+}
+.pave-touche:active { filter: brightness(0.92); }
+.pave-touche.efface { background: var(--creme-fonce); color: var(--rouge); }
+
+.especes-actions { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; }
+.especes-actions .btn { min-height: 58px; }
+
+/* ---- Écran 3 : historique ---- */
+.liste { flex: 1 1 auto; overflow-y: auto; padding: 8px 12px; }
+.histo-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--ombre);
+}
+.histo-item.annulee { opacity: 0.55; }
+.histo-item.annulee .histo-total { text-decoration: line-through; }
+.histo-heure { font-size: 1.1rem; font-weight: 700; color: var(--bleu-fonce); }
+.histo-detail { font-size: 0.88rem; color: var(--gris); line-height: 1.25; }
+.histo-paiement {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--creme-fonce);
+  color: var(--bleu-fonce);
+}
+.histo-droite { text-align: right; }
+.histo-total { font-size: 1.2rem; font-weight: 800; }
+.histo-annuler {
+  margin-top: 4px;
+  border: 1px solid var(--rouge);
+  background: transparent;
+  color: var(--rouge);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.badge-annulee { font-size: 0.75rem; color: var(--rouge); font-weight: 700; }
+.vide-msg { text-align: center; color: var(--gris); font-style: italic; padding: 32px 16px; }
+
+/* ---- Écran 4 : bilan ---- */
+.bilan-entete { display: flex; align-items: center; justify-content: space-between; padding-right: 16px; }
+.select-jour {
+  font-size: 1rem;
+  padding: 8px 10px;
+  border-radius: var(--rayon);
+  border: 2px solid var(--creme-fonce);
+  background: var(--blanc);
+  margin: 0 16px 8px;
+}
+.bilan-contenu { flex: 1 1 auto; overflow-y: auto; padding: 4px 12px 12px; }
+.bilan-cartes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.bilan-carte {
+  background: var(--blanc);
+  border-radius: var(--rayon);
+  padding: 14px;
+  box-shadow: var(--ombre);
+}
+.bilan-carte.large { grid-column: 1 / -1; }
+.bilan-carte .libelle { font-size: 0.82rem; color: var(--gris); font-weight: 600; }
+.bilan-carte .valeur  { font-size: 1.7rem; font-weight: 800; color: var(--bleu-fonce); }
+.bilan-carte .sous    { font-size: 0.82rem; color: var(--gris); }
+.bilan-section-titre { font-weight: 700; color: var(--bleu-fonce); margin: 6px 4px; }
+
+table.bilan-table { width: 100%; border-collapse: collapse; background: var(--blanc); border-radius: var(--rayon); overflow: hidden; box-shadow: var(--ombre); }
+table.bilan-table th, table.bilan-table td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--creme-fonce); }
+table.bilan-table th { background: var(--creme-fonce); font-size: 0.8rem; text-transform: uppercase; color: var(--gris); }
+table.bilan-table td.num, table.bilan-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.bilan-table tr:last-child td { border-bottom: none; }
+
+.histo-heures { display: flex; align-items: flex-end; gap: 4px; height: 120px; padding: 8px 4px; background: var(--blanc); border-radius: var(--rayon); box-shadow: var(--ombre); }
+.heure-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; }
+.heure-bar { width: 70%; background: var(--bleu-clair); border-radius: 4px 4px 0 0; min-height: 2px; }
+.heure-bar.vide { background: var(--creme-fonce); }
+.heure-label { font-size: 0.65rem; color: var(--gris); }
+.heure-val   { font-size: 0.7rem; font-weight: 700; color: var(--bleu-fonce); }
+
+/* ---- Écran 5 : export ---- */
+.export-info { padding: 0 16px; color: var(--gris); }
+
+/* ---- Navigation bas ---- */
+.nav-bas {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--bleu-fonce);
+  z-index: 20;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.nav-btn {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nav-btn.actif { color: var(--blanc); box-shadow: inset 0 3px 0 var(--creme); }
+.nav-bas[hidden] { display: none; }
+
+/* Toast léger */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-h) + 16px);
+  transform: translateX(-50%);
+  background: var(--bleu-fonce);
+  color: var(--blanc);
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-weight: 700;
+  box-shadow: var(--ombre);
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.toast.visible { opacity: 1; }
