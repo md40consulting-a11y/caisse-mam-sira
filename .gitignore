@@ -1,0 +1,17 @@
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+.vscode/
+.idea/
+
+# Exports de caisse récupérés pour l'analyse (données, pas du code)
+analyse/exports/
+*.csv
+*.json
+!app/manifest.json
+!.claude/launch.json
+
+# Divers
+*.log
