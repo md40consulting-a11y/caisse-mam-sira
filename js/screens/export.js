@@ -34,6 +34,7 @@ async function majInfo() {
 const ENTETE_CSV = [
   'id_commande', 'horodatage', 'date_jour', 'poste', 'paiement',
   'product_id', 'nom', 'prix_unitaire', 'quantite', 'total_ligne', 'statut', 'note',
+  'regle_par', 'regle_le',
 ];
 
 async function exporterCsv() {
@@ -46,6 +47,7 @@ async function exporterCsv() {
         c.id, c.horodatage, c.date_jour, c.poste, c.paiement,
         l.product_id, l.nom, l.prix_unitaire_centimes, l.quantite,
         l.prix_unitaire_centimes * l.quantite, c.statut, c.note || '',
+        c.regle_par || '', c.regle_le || '',
       ].map(csvCell).join(','));
     }
   }

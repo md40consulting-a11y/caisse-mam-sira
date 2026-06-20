@@ -37,11 +37,17 @@ async function afficherJour(jour) {
 
 const nbLabel = (n) => `${n} commande${n > 1 ? 's' : ''}`;
 
+// Encaissement EFFECTIF d'une commande : une ardoise réglée bascule vers son moyen réel.
+function effectif(c) {
+  if (c.paiement === 'plus_tard') return c.regle_par || 'a_encaisser';
+  return c.paiement;
+}
+
 function cartesHaut(validees) {
   const somme = (arr) => arr.reduce((s, c) => s + c.total_centimes, 0);
-  const cb = validees.filter((c) => c.paiement === 'cb');
-  const esp = validees.filter((c) => c.paiement === 'especes');
-  const plusTard = validees.filter((c) => c.paiement === 'plus_tard');
+  const cb = validees.filter((c) => effectif(c) === 'cb');
+  const esp = validees.filter((c) => effectif(c) === 'especes');
+  const plusTard = validees.filter((c) => effectif(c) === 'a_encaisser');
   const caTotal = somme(validees);
   const caPlusTard = somme(plusTard);
 

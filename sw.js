@@ -1,7 +1,7 @@
 // sw.js — Service Worker : cache l'app shell pour un fonctionnement 100 % hors-ligne.
 // Stratégie : cache-first sur les fichiers de l'app (statiques, versionnés par CACHE).
 
-const CACHE = 'caisse-mam-sira-v2';
+const CACHE = 'caisse-mam-sira-v3';
 
 const APP_SHELL = [
   './',
