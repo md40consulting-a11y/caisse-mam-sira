@@ -1,6 +1,8 @@
 // db.js — seule couche qui touche IndexedDB. Stocke les commandes.
 // Règle d'or : chaque commande validée est écrite immédiatement (durable).
 
+import { nowISO } from './utils.js';
+
 const DB_NAME = 'caisse_mam_sira';
 const DB_VERSION = 1;
 const STORE = 'commandes';
@@ -93,4 +95,24 @@ export async function annulerCommande(id) {
   if (!commande) return null;
   commande.statut = 'annulee';
   return putCommande(commande);
+}
+
+/**
+ * Marque une ardoise (paiement "plus_tard") comme réglée.
+ * `moyen` ∈ "especes" | "cb" — comment le client a finalement payé.
+ */
+export async function reglerCommande(id, moyen) {
+  const commande = await getCommande(id);
+  if (!commande) return null;
+  commande.regle_le = nowISO();
+  commande.regle_par = moyen;
+  return putCommande(commande);
+}
+
+/** Ardoises validées non encore réglées, tous jours confondus (récent → ancien). */
+export async function getArdoisesNonReglees() {
+  const all = await getAllCommandes();
+  return all
+    .filter((c) => c.statut === 'validee' && c.paiement === 'plus_tard' && !c.regle_le)
+    .sort((a, b) => (a.horodatage < b.horodatage ? 1 : -1));
 }

@@ -313,11 +313,37 @@ body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidd
 .histo-item.annulee { opacity: 0.55; }
 .histo-item.annulee .histo-total { text-decoration: line-through; }
 .histo-item.plus-tard { border-left: 5px solid var(--ambre); }
+.histo-item.reglee { border-left-color: var(--vert); }
 .paiement-plustard { background: var(--ambre) !important; color: var(--blanc) !important; }
 .badge-payer {
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; white-space: nowrap;
   color: var(--ambre-fonce); border: 1px solid var(--ambre); border-radius: 6px; padding: 1px 6px;
 }
+.badge-paye {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; white-space: nowrap;
+  color: var(--blanc); background: var(--vert); border-radius: 6px; padding: 1px 6px;
+}
+.histo-section-titre {
+  font-weight: 700; color: var(--bleu-fonce); font-size: 0.9rem;
+  margin: 8px 4px 4px; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.histo-regler {
+  margin-top: 4px;
+  border: none; background: var(--ambre); color: var(--blanc);
+  border-radius: 8px; padding: 7px 12px; min-height: 40px;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer; touch-action: manipulation;
+}
+.histo-regler:active { filter: brightness(0.93); }
+.histo-regler-choix { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.rc-label { font-size: 0.8rem; color: var(--gris); font-weight: 600; }
+.rc-btn {
+  border: none; border-radius: 8px; padding: 8px 12px; min-height: 40px;
+  font-size: 0.85rem; font-weight: 700; color: var(--blanc); cursor: pointer; touch-action: manipulation;
+}
+.rc-especes { background: var(--vert); }
+.rc-cb { background: var(--bleu-clair); }
+.rc-annuler { background: var(--gris); padding: 8px 10px; }
+.rc-btn:active { filter: brightness(0.93); }
 .histo-note {
   margin-top: 4px; font-size: 0.9rem; color: var(--texte);
   background: #fff7ea; border-radius: 6px; padding: 4px 8px; display: inline-block;
@@ -329,6 +355,7 @@ body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidd
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
+  white-space: nowrap;
   padding: 1px 6px;
   border-radius: 6px;
   background: var(--creme-fonce);

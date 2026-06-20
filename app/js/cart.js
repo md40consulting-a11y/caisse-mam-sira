@@ -106,6 +106,9 @@ export function construireCommande({ poste, paiement, montantDonneCentimes = nul
     montant_donne_centimes: estEspeces ? montantDonneCentimes : null,
     monnaie_rendue_centimes: estEspeces ? montantDonneCentimes - total : null,
     note: _note.trim(),
+    // Règlement d'une ardoise (paiement "plus_tard") : renseignés plus tard via db.reglerCommande.
+    regle_le: null,
+    regle_par: null,
     statut: 'validee',
   };
 }

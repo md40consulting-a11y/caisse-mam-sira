@@ -35,6 +35,10 @@ total_centimes, paiement, montant_donne_centimes, monnaie_rendue_centimes, note,
 `paiement` ∈ `cb` | `especes` | `plus_tard`. Le mode **`plus_tard`** (ardoise amis/famille) compte
 dans le CA mais pas dans l'argent encaissé — affiché à part dans le bilan (« À encaisser »).
 `note` = texte libre optionnel attaché à la commande (qui doit, commande spéciale…).
+Une ardoise réglée plus tard : `regle_le` (ISO) + `regle_par` (`especes`|`cb`) via `db.reglerCommande`.
+Dans le bilan, `effectif()` reclasse une ardoise réglée vers son moyen réel ; les ardoises non réglées
+restent en « À encaisser ». Bouton « Marquer payé » dans l'Historique (multi-jours : les ardoises non
+réglées des jours précédents sont épinglées en haut).
 
 ## Règles d'or
 1. Chaque commande validée est **écrite immédiatement** en IndexedDB (pas de buffer mémoire).
