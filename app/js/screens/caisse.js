@@ -6,34 +6,46 @@ import { putCommande } from '../db.js';
 import { formatEuros } from '../utils.js';
 
 let app;
-let elProduits, elPanier, elTotal;
+let elProduits, elPanier, elTotal, elNote;
 
 export function initCaisse(appRef) {
   app = appRef;
   elProduits = document.getElementById('produits-zone');
   elPanier = document.getElementById('panier-lignes');
   elTotal = document.getElementById('total-caisse');
+  elNote = document.getElementById('note-input');
 
   construireGrille();
+
+  // La note suit la frappe (sauvegardée dans le panier courant).
+  elNote.addEventListener('input', () => {
+    cart.setNote(elNote.value);
+    elNote.classList.toggle('rempli', elNote.value.trim() !== '');
+  });
 
   document.getElementById('btn-annuler').addEventListener('click', () => {
     cart.vider();
     renderCaisse();
   });
 
-  document.getElementById('btn-cb').addEventListener('click', async () => {
-    if (cart.estVide()) return;
-    const commande = cart.construireCommande({ poste: app.poste, paiement: 'cb' });
-    await putCommande(commande);
-    cart.vider();
-    renderCaisse();
-    app.toast('Encaissé CB ✓');
-  });
+  document.getElementById('btn-cb').addEventListener('click', () => encaisserDirect('cb', 'Encaissé CB ✓'));
+  document.getElementById('btn-plustard').addEventListener('click', () =>
+    encaisserDirect('plus_tard', 'Noté — à payer plus tard'));
 
   document.getElementById('btn-especes').addEventListener('click', () => {
     if (cart.estVide()) return;
     app.openEspeces();
   });
+}
+
+/** Encaissement sans saisie de montant (CB ou « Plus tard »). */
+async function encaisserDirect(paiement, message) {
+  if (cart.estVide()) return;
+  const commande = cart.construireCommande({ poste: app.poste, paiement });
+  await putCommande(commande);
+  cart.vider();
+  renderCaisse();
+  app.toast(message);
 }
 
 /** Construit la grille de boutons produits, groupés par catégorie. */
@@ -92,6 +104,11 @@ export function renderCaisse() {
   }
 
   elTotal.textContent = formatEuros(cart.totalCentimes());
+
+  // Synchronise le champ note avec l'état du panier (vidé après encaissement).
+  const note = cart.getNote();
+  if (elNote.value !== note) elNote.value = note;
+  elNote.classList.toggle('rempli', note.trim() !== '');
 }
 
 function creerLignePanier(ligne) {

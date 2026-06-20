@@ -32,14 +32,17 @@
     </aside>
 
     <div class="barre-encaissement">
+      <input id="note-input" class="note-input" type="text" autocomplete="off"
+             placeholder="Note (optionnel) — ex. Amadou, paie dimanche">
       <div class="total-ligne">
-        <span>Total</span>
+        <span class="total-label">Total</span>
         <span class="total-montant" id="total-caisse">0,00 €</span>
+        <button id="btn-annuler" class="btn-annuler">Annuler</button>
       </div>
       <div class="encaissement-boutons">
-        <button id="btn-annuler" class="btn btn-neutre">Annuler</button>
         <button id="btn-cb" class="btn btn-cb">CB</button>
         <button id="btn-especes" class="btn btn-especes">Espèces</button>
+        <button id="btn-plustard" class="btn btn-plustard">Plus tard</button>
       </div>
     </div>
   </section>

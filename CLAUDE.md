@@ -30,8 +30,11 @@ pour analyse à froid sous R.
 
 ## Modèle de données
 Voir §5 du CDC. Résumé : une `commande` = `{ id, horodatage, date_jour, poste, lignes[],
-total_centimes, paiement, montant_donne_centimes, monnaie_rendue_centimes, statut }`.
+total_centimes, paiement, montant_donne_centimes, monnaie_rendue_centimes, note, statut }`.
 `statut` ∈ `validee` | `annulee` (les annulées sont conservées pour l'audit, exclues des totaux).
+`paiement` ∈ `cb` | `especes` | `plus_tard`. Le mode **`plus_tard`** (ardoise amis/famille) compte
+dans le CA mais pas dans l'argent encaissé — affiché à part dans le bilan (« À encaisser »).
+`note` = texte libre optionnel attaché à la commande (qui doit, commande spéciale…).
 
 ## Règles d'or
 1. Chaque commande validée est **écrite immédiatement** en IndexedDB (pas de buffer mémoire).

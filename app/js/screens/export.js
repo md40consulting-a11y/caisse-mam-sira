@@ -30,10 +30,10 @@ async function majInfo() {
     `${commandes.length - validees} annulée(s).`;
 }
 
-// En-tête CSV — conforme §6 du CDC, + date_jour & paiement en colonnes bonus.
+// En-tête CSV — conforme §6 du CDC, + date_jour, paiement, statut & note en colonnes bonus.
 const ENTETE_CSV = [
   'id_commande', 'horodatage', 'date_jour', 'poste', 'paiement',
-  'product_id', 'nom', 'prix_unitaire', 'quantite', 'total_ligne', 'statut',
+  'product_id', 'nom', 'prix_unitaire', 'quantite', 'total_ligne', 'statut', 'note',
 ];
 
 async function exporterCsv() {
@@ -45,7 +45,7 @@ async function exporterCsv() {
       lignes.push([
         c.id, c.horodatage, c.date_jour, c.poste, c.paiement,
         l.product_id, l.nom, l.prix_unitaire_centimes, l.quantite,
-        l.prix_unitaire_centimes * l.quantite, c.statut,
+        l.prix_unitaire_centimes * l.quantite, c.statut, c.note || '',
       ].map(csvCell).join(','));
     }
   }
