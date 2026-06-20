@@ -8,6 +8,8 @@
   --bleu-clair:   #2b6da3;
   --vert:         #2e7d4f;
   --vert-fonce:   #1f5c39;
+  --ambre:        #c87f1a;
+  --ambre-fonce:  #9a5f10;
   --rouge:        #b3402e;
   --gris:         #6b6256;
   --texte:        #2a2620;
@@ -69,6 +71,7 @@ body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidd
 .btn-neutre  { background: var(--gris); }
 .btn-cb      { background: var(--bleu-clair); }
 .btn-especes { background: var(--vert); }
+.btn-plustard { background: var(--ambre); }
 
 /* ---- Écran 0 : config ---- */
 #screen-config { justify-content: center; align-items: center; padding: 24px; }
@@ -200,16 +203,43 @@ body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidd
   padding: 10px 12px;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
 }
+.note-input {
+  width: 100%;
+  font-size: 16px;            /* >= 16px : évite le zoom auto iOS au focus */
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  border: 2px solid var(--creme-fonce);
+  border-radius: var(--rayon);
+  background: var(--creme);
+  color: var(--texte);
+}
+.note-input:focus { outline: none; border-color: var(--ambre); background: var(--blanc); }
+.note-input.rempli { border-color: var(--ambre); background: #fff7ea; }
+
 .total-ligne {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 8px;
 }
-.total-ligne > span:first-child { font-size: 1rem; color: var(--gris); font-weight: 600; }
-.total-montant { font-size: 2rem; font-weight: 800; color: var(--bleu-fonce); }
+.total-label { font-size: 1rem; color: var(--gris); font-weight: 600; }
+.total-montant { font-size: 2rem; font-weight: 800; color: var(--bleu-fonce); margin-right: auto; }
+.btn-annuler {
+  flex: 0 0 auto;
+  border: 2px solid var(--gris);
+  background: transparent;
+  color: var(--gris);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--rayon);
+  padding: 8px 16px;
+  min-height: 44px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.btn-annuler:active { filter: brightness(0.92); }
 .encaissement-boutons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.encaissement-boutons .btn { min-height: 58px; font-size: 1.1rem; }
+.encaissement-boutons .btn { min-height: 58px; font-size: 1.1rem; padding: 0 8px; }
 
 /* ---- Écran 2 : espèces ---- */
 #screen-especes { padding: 12px 12px calc(var(--nav-h) + 12px); }
@@ -282,6 +312,16 @@ body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidd
 }
 .histo-item.annulee { opacity: 0.55; }
 .histo-item.annulee .histo-total { text-decoration: line-through; }
+.histo-item.plus-tard { border-left: 5px solid var(--ambre); }
+.paiement-plustard { background: var(--ambre) !important; color: var(--blanc) !important; }
+.badge-payer {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  color: var(--ambre-fonce); border: 1px solid var(--ambre); border-radius: 6px; padding: 1px 6px;
+}
+.histo-note {
+  margin-top: 4px; font-size: 0.9rem; color: var(--texte);
+  background: #fff7ea; border-radius: 6px; padding: 4px 8px; display: inline-block;
+}
 .histo-heure { font-size: 1.1rem; font-weight: 700; color: var(--bleu-fonce); }
 .histo-detail { font-size: 0.88rem; color: var(--gris); line-height: 1.25; }
 .histo-paiement {
@@ -329,6 +369,8 @@ body { display: flex; flex-direction: column; min-height: 100%; overflow-x: hidd
   box-shadow: var(--ombre);
 }
 .bilan-carte.large { grid-column: 1 / -1; }
+.bilan-carte.carte-ambre { background: #fff7ea; border-left: 5px solid var(--ambre); }
+.bilan-carte.carte-ambre .valeur { color: var(--ambre-fonce); }
 .bilan-carte .libelle { font-size: 0.82rem; color: var(--gris); font-weight: 600; }
 .bilan-carte .valeur  { font-size: 1.7rem; font-weight: 800; color: var(--bleu-fonce); }
 .bilan-carte .sous    { font-size: 0.82rem; color: var(--gris); }

@@ -27,38 +27,48 @@ async function afficherJour(jour) {
     return;
   }
 
-  const caTotal = validees.reduce((s, c) => s + c.total_centimes, 0);
-  const cb = validees.filter((c) => c.paiement === 'cb');
-  const esp = validees.filter((c) => c.paiement === 'especes');
-  const caCb = cb.reduce((s, c) => s + c.total_centimes, 0);
-  const caEsp = esp.reduce((s, c) => s + c.total_centimes, 0);
-
   elContenu.innerHTML =
-    cartesHaut(caTotal, validees.length, caCb, cb.length, caEsp, esp.length) +
+    cartesHaut(validees) +
     `<div class="bilan-section-titre">Ventes par produit</div>` +
     tableauProduits(validees) +
     `<div class="bilan-section-titre">Affluence par heure</div>` +
     histoHeures(validees);
 }
 
-function cartesHaut(caTotal, nbTotal, caCb, nbCb, caEsp, nbEsp) {
+const nbLabel = (n) => `${n} commande${n > 1 ? 's' : ''}`;
+
+function cartesHaut(validees) {
+  const somme = (arr) => arr.reduce((s, c) => s + c.total_centimes, 0);
+  const cb = validees.filter((c) => c.paiement === 'cb');
+  const esp = validees.filter((c) => c.paiement === 'especes');
+  const plusTard = validees.filter((c) => c.paiement === 'plus_tard');
+  const caTotal = somme(validees);
+  const caPlusTard = somme(plusTard);
+
+  // Sous-titre du CA : rappelle la part non encaissée s'il y a des ardoises.
+  const sousCa = caPlusTard > 0
+    ? `${nbLabel(validees.length)} · dont ${formatEuros(caPlusTard)} à encaisser`
+    : `${validees.length} commande${validees.length > 1 ? 's' : ''} validée${validees.length > 1 ? 's' : ''}`;
+
+  const carteEncaisse = (libelle, montant, n, extraClass = '') =>
+    `<div class="bilan-carte ${extraClass}">` +
+      `<div class="libelle">${libelle}</div>` +
+      `<div class="valeur">${formatEuros(montant)}</div>` +
+      `<div class="sous">${nbLabel(n)}</div>` +
+    `</div>`;
+
   return (
     `<div class="bilan-cartes">` +
       `<div class="bilan-carte large">` +
         `<div class="libelle">Chiffre d'affaires</div>` +
         `<div class="valeur">${formatEuros(caTotal)}</div>` +
-        `<div class="sous">${nbTotal} commande${nbTotal > 1 ? 's' : ''} validée${nbTotal > 1 ? 's' : ''}</div>` +
+        `<div class="sous">${sousCa}</div>` +
       `</div>` +
-      `<div class="bilan-carte">` +
-        `<div class="libelle">CB</div>` +
-        `<div class="valeur">${formatEuros(caCb)}</div>` +
-        `<div class="sous">${nbCb} commande${nbCb > 1 ? 's' : ''}</div>` +
-      `</div>` +
-      `<div class="bilan-carte">` +
-        `<div class="libelle">Espèces</div>` +
-        `<div class="valeur">${formatEuros(caEsp)}</div>` +
-        `<div class="sous">${nbEsp} commande${nbEsp > 1 ? 's' : ''}</div>` +
-      `</div>` +
+      carteEncaisse('CB', somme(cb), cb.length) +
+      carteEncaisse('Espèces', somme(esp), esp.length) +
+      (plusTard.length > 0
+        ? carteEncaisse('À encaisser (plus tard)', caPlusTard, plusTard.length, 'large carte-ambre')
+        : '') +
     `</div>`
   );
 }

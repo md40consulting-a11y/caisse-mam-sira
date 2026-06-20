@@ -25,21 +25,32 @@ export async function renderHistorique() {
   }
 }
 
+const PAIEMENT_LABELS = { cb: 'CB', especes: 'Espèces', plus_tard: 'Plus tard' };
+
+/** Échappe un texte libre avant insertion dans le HTML. */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function creerItem(c) {
   const nbArticles = c.lignes.reduce((n, l) => n + l.quantite, 0);
   const resume = c.lignes.map((l) => `${l.quantite}× ${l.nom}`).join(', ');
-  const paiementLabel = c.paiement === 'cb' ? 'CB' : 'Espèces';
+  const paiementLabel = PAIEMENT_LABELS[c.paiement] || c.paiement;
+  const plusTard = c.paiement === 'plus_tard';
   const annulee = c.statut === 'annulee';
 
   const div = document.createElement('div');
-  div.className = 'histo-item' + (annulee ? ' annulee' : '');
+  div.className = 'histo-item' + (annulee ? ' annulee' : '') + (plusTard ? ' plus-tard' : '');
   div.innerHTML =
     `<div class="histo-heure">${formatHeure(c.horodatage)}</div>` +
     `<div>` +
       `<div class="histo-detail">${resume}</div>` +
-      `<span class="histo-paiement">${paiementLabel}</span> ` +
+      `<span class="histo-paiement${plusTard ? ' paiement-plustard' : ''}">${paiementLabel}</span> ` +
       `<span class="histo-detail">${nbArticles} art.</span>` +
+      (plusTard && !annulee ? ' <span class="badge-payer">À PAYER</span>' : '') +
       (annulee ? ' <span class="badge-annulee">ANNULÉE</span>' : '') +
+      (c.note ? `<div class="histo-note">📝 ${escapeHtml(c.note)}</div>` : '') +
     `</div>` +
     `<div class="histo-droite">` +
       `<div class="histo-total">${formatEuros(c.total_centimes)}</div>` +

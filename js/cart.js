@@ -6,6 +6,19 @@ import { uuid, nowISO, dateJour } from './utils.js';
 // Map product_id -> { product_id, nom, prix_unitaire_centimes, quantite }
 const _lignes = new Map();
 
+// Note libre attachée à la commande courante (ex. « Amadou, paie dimanche »).
+let _note = '';
+
+/** Définit la note de la commande courante. */
+export function setNote(texte) {
+  _note = String(texte || '');
+}
+
+/** Retourne la note courante. */
+export function getNote() {
+  return _note;
+}
+
 /** Ajoute +1 d'un produit (ou crée la ligne). */
 export function ajouter(produit) {
   const existante = _lignes.get(produit.id);
@@ -40,9 +53,10 @@ export function supprimer(productId) {
   _lignes.delete(productId);
 }
 
-/** Vide le panier. */
+/** Vide le panier (lignes + note). */
 export function vider() {
   _lignes.clear();
+  _note = '';
 }
 
 /** Quantité courante d'un produit (0 si absent) — pour le badge du bouton. */
@@ -76,7 +90,7 @@ export function totalCentimes() {
 
 /**
  * Construit l'objet commande à partir du panier courant.
- * `paiement` ∈ "cb" | "especes". Pour les espèces, fournir montant_donne_centimes.
+ * `paiement` ∈ "cb" | "especes" | "plus_tard". Pour les espèces, fournir montant_donne_centimes.
  */
 export function construireCommande({ poste, paiement, montantDonneCentimes = null }) {
   const total = totalCentimes();
@@ -91,6 +105,7 @@ export function construireCommande({ poste, paiement, montantDonneCentimes = nul
     paiement,
     montant_donne_centimes: estEspeces ? montantDonneCentimes : null,
     monnaie_rendue_centimes: estEspeces ? montantDonneCentimes - total : null,
+    note: _note.trim(),
     statut: 'validee',
   };
 }
