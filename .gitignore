@@ -13,5 +13,12 @@ analyse/exports/
 !app/manifest.json
 !.claude/launch.json
 
+# Dépendances JS (génération du rapport docx)
+node_modules/
+
+# Artefacts d'analyse régénérables (rapport, graphiques)
+analyse/*.docx
+analyse/*.png
+
 # Divers
 *.log
